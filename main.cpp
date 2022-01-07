@@ -97,7 +97,13 @@ GLenum glCheckError_(const char *file, int line) {
 
 void windowResizeCallback(GLFWwindow *window, int width, int height) {
     fprintf(stdout, "Window resized! New width: %d , and height: %d\n", width, height);
-    //TODO
+    int bufWidth;
+    int bufHeight;
+    glfwGetFramebufferSize(window, &bufWidth, &bufHeight);
+    glViewport(0, 0, bufWidth, bufHeight);
+    myWindow.setWindowDimensions(WindowDimensions{width, height});
+
+
 }
 
 void keyboardCallback(GLFWwindow *window, int key, int scancode, int action, int mode) {
@@ -121,19 +127,19 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
 void processMovement() {
     //camera movement
     if (pressedKeys[GLFW_KEY_LEFT]) {
-        myCamera.rotate(0, -(cameraRotation*delta));
+        myCamera.rotate(0, -(cameraRotation * delta));
     }
 
     if (pressedKeys[GLFW_KEY_RIGHT]) {
-        myCamera.rotate(0, cameraRotation*delta);
+        myCamera.rotate(0, cameraRotation * delta);
     }
 
     if (pressedKeys[GLFW_KEY_UP]) {
-        myCamera.rotate(cameraRotation*delta, 0);
+        myCamera.rotate(cameraRotation * delta, 0);
     }
 
     if (pressedKeys[GLFW_KEY_DOWN]) {
-        myCamera.rotate(-(cameraRotation*delta), 0);
+        myCamera.rotate(-(cameraRotation * delta), 0);
     }
 
     if (pressedKeys[GLFW_KEY_W]) {
@@ -247,16 +253,14 @@ void initUniforms() {
 
     //skybox-projection
     //    projection = glm::perspective(glm::radians(45.0f), (float) retina_width / (float) retina_height, 0.1f, 1000.0f);
-    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "projection"), 1, GL_FALSE,
-                       glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     // create projection matrix
     projection = glm::perspective(glm::radians(45.0f),
                                   (float) myWindow.getWindowDimensions().width /
                                   (float) myWindow.getWindowDimensions().height,
-                                  0.1f, 20.0f);
-    projectionLoc = glGetUniformLocation(myBasicShader.shaderProgram, "projection");
+                                  0.1f, 40.0f);
     // send projection matrix to shader
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(myBasicShader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     //set the light direction (direction towards the light)
     lightDir = glm::vec3(0.0f, 1.0f, 1.0f);
