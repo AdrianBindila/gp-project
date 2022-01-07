@@ -34,7 +34,7 @@ namespace gps {
         glm::vec3 cameraFrontDirection; //coordinates of z-axis
         glm::vec3 cameraRightDirection; //x-axis
         glm::vec3 cameraUpDirection;    //y-axis
-        float pitch = -90;
+        float pitch;
         float yaw;
     };
 

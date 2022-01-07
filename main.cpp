@@ -45,6 +45,7 @@ gps::Camera myCamera(
 GLfloat delta = 0;
 GLfloat lastFrame = 0;
 GLfloat cameraSpeed = 10.0f;
+GLfloat cameraRotation = 100.0f;
 
 GLboolean pressedKeys[1024];
 
@@ -120,19 +121,19 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
 void processMovement() {
     //camera movement
     if (pressedKeys[GLFW_KEY_LEFT]) {
-        myCamera.rotate(0, -1.5f);
+        myCamera.rotate(0, -(cameraRotation*delta));
     }
 
     if (pressedKeys[GLFW_KEY_RIGHT]) {
-        myCamera.rotate(0, 1.5f);
+        myCamera.rotate(0, cameraRotation*delta);
     }
 
     if (pressedKeys[GLFW_KEY_UP]) {
-        myCamera.rotate(1.5f, 0);
+        myCamera.rotate(cameraRotation*delta, 0);
     }
 
     if (pressedKeys[GLFW_KEY_DOWN]) {
-        myCamera.rotate(-1.5f, 0);
+        myCamera.rotate(-(cameraRotation*delta), 0);
     }
 
     if (pressedKeys[GLFW_KEY_W]) {
