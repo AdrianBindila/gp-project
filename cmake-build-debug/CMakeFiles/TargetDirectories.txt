@@ -1,0 +1,3 @@
+/home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core/cmake-build-debug/CMakeFiles/OpenGL_Project_Core.dir

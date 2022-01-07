@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.21"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "OpenGL_Project_Core",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenGL_Project_Core::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenGL_Project_Core-Debug-c009d45c5ecc6c20b290.json",
+					"name" : "OpenGL_Project_Core",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core/cmake-build-debug",
+		"source" : "/home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

@@ -1,0 +1,4 @@
+/home/adrian/programs/CLion-2021.1/clion-2021.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/adrian/programs/CLion-2021.1/clion-2021.1/bin/ninja/linux/ninja -G Ninja /home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core/cmake-build-debug
