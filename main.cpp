@@ -126,6 +126,30 @@ void processMovement() {
         // compute normal matrix for teapot
         normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
     }
+    if(pressedKeys[GLFW_KEY_RIGHT]){
+        myCamera.rotate(0,1.5f);
+        view = myCamera.getViewMatrix();
+        myBasicShader.useShaderProgram();
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        // compute normal matrix for teapot
+        normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
+    }
+    if(pressedKeys[GLFW_KEY_UP]){
+        myCamera.rotate(1.5f,0);
+        view = myCamera.getViewMatrix();
+        myBasicShader.useShaderProgram();
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        // compute normal matrix for teapot
+        normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
+    }
+    if(pressedKeys[GLFW_KEY_DOWN]){
+        myCamera.rotate(-1.5f,0);
+        view = myCamera.getViewMatrix();
+        myBasicShader.useShaderProgram();
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        // compute normal matrix for teapot
+        normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
+    }
     if (pressedKeys[GLFW_KEY_W]) {
         myCamera.move(gps::MOVE_FORWARD, cameraSpeed);
         //update view matrix
