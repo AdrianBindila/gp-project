@@ -9,7 +9,7 @@
 namespace gps {
 
     enum MOVE_DIRECTION {
-        MOVE_FORWARD, MOVE_BACKWARD, MOVE_RIGHT, MOVE_LEFT
+        MOVE_FORWARD, MOVE_BACKWARD, MOVE_RIGHT, MOVE_LEFT, MOVE_UPWARD, MOVE_DOWNWARD
     };
 
     class Camera {
@@ -34,6 +34,7 @@ namespace gps {
         glm::vec3 cameraFrontDirection; //coordinates of z-axis
         glm::vec3 cameraRightDirection; //x-axis
         glm::vec3 cameraUpDirection;    //y-axis
+        glm::vec3 cameraUp; //global up - for shift and space
         float pitch;
         float yaw;
     };

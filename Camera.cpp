@@ -13,6 +13,7 @@ namespace gps {
         this->cameraUpDirection = glm::cross(this->cameraFrontDirection, this->cameraRightDirection);
         this->pitch = 0;
         this->yaw = 0;
+        this->cameraUp = cameraUp;
         rotate(pitch, yaw);
     }
 
@@ -36,6 +37,12 @@ namespace gps {
             case MOVE_RIGHT:
                 cameraPosition += speed * cameraRightDirection;
                 break;
+            case MOVE_UPWARD:
+                cameraPosition += speed * cameraUp;
+                break;
+            case MOVE_DOWNWARD:
+                cameraPosition -= speed * cameraUp;
+                break;
         }
     }
 
@@ -52,7 +59,7 @@ namespace gps {
         if (this->pitch < -89.0f) {
             this->pitch = -89.0f;
         }
-        printf("%f %f\n", this->pitch, this->yaw);
+//        printf("%f %f\n", this->pitch, this->yaw);
         cameraFrontDirection.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
         cameraFrontDirection.y = sin(glm::radians(this->pitch));
         cameraFrontDirection.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));

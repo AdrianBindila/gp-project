@@ -52,6 +52,7 @@ GLfloat cameraRotation = 100.0f;
 //mouse
 float prevX = WIDTH / 2.;
 float prevY = HEIGHT / 2.;
+bool firstMouse = true;
 
 GLboolean pressedKeys[1024];
 
@@ -131,8 +132,12 @@ void keyboardCallback(GLFWwindow *window, int key, int scancode, int action, int
     }
 }
 
-
 void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
+    if (firstMouse) {
+        prevX = xpos;
+        prevY = ypos;
+        firstMouse = false;
+    }
     float deltaX = xpos - prevX;
     float deltaY = prevY - ypos;
     prevX = xpos;
@@ -146,7 +151,44 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
 }
 
 void processMovement() {
+    /*Controls:
+     * WASD - forward, left, backwards, right
+     * Space - up
+     * LCtrl - down
+     * LShift - turbo
+     * mouse - look
+     * arrows - look
+     * Q,E - rotate teapot
+    */
     //camera movement
+    float deltaSpeed = cameraSpeed * delta;
+    if (pressedKeys[GLFW_KEY_LEFT_SHIFT])//activate turbo
+        deltaSpeed *= 4;
+
+    if (pressedKeys[GLFW_KEY_SPACE]) {
+        myCamera.move(gps::MOVE_UPWARD, deltaSpeed);
+    }
+
+    if (pressedKeys[GLFW_KEY_LEFT_CONTROL]) {
+        myCamera.move(gps::MOVE_DOWNWARD, deltaSpeed);
+    }
+
+    if (pressedKeys[GLFW_KEY_W]) {
+        myCamera.move(gps::MOVE_FORWARD, deltaSpeed);
+    }
+
+    if (pressedKeys[GLFW_KEY_S]) {
+        myCamera.move(gps::MOVE_BACKWARD, deltaSpeed);
+    }
+
+    if (pressedKeys[GLFW_KEY_A]) {
+        myCamera.move(gps::MOVE_LEFT, deltaSpeed);
+    }
+
+    if (pressedKeys[GLFW_KEY_D]) {
+        myCamera.move(gps::MOVE_RIGHT, deltaSpeed);
+    }
+
     if (pressedKeys[GLFW_KEY_LEFT]) {
         myCamera.rotate(0, -(cameraRotation * delta));
     }
@@ -161,22 +203,6 @@ void processMovement() {
 
     if (pressedKeys[GLFW_KEY_DOWN]) {
         myCamera.rotate(-(cameraRotation * delta), 0);
-    }
-
-    if (pressedKeys[GLFW_KEY_W]) {
-        myCamera.move(gps::MOVE_FORWARD, cameraSpeed * delta);
-    }
-
-    if (pressedKeys[GLFW_KEY_S]) {
-        myCamera.move(gps::MOVE_BACKWARD, cameraSpeed * delta);
-    }
-
-    if (pressedKeys[GLFW_KEY_A]) {
-        myCamera.move(gps::MOVE_LEFT, cameraSpeed * delta);
-    }
-
-    if (pressedKeys[GLFW_KEY_D]) {
-        myCamera.move(gps::MOVE_RIGHT, cameraSpeed * delta);
     }
 
     //update view matrix
