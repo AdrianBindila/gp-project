@@ -43,10 +43,6 @@ namespace gps {
     //yaw - camera rotation around the y axis
     //pitch - camera rotation around the x axis
     void Camera::rotate(float pitch, float yaw) {//pitch and yaw should be in radians
-        //TODO: include pitch and yaw as camera properties
-
-//        float radPitch = glm::radians(pitch);
-//        float radYaw = glm::radians(yaw);
         this->pitch += pitch;
         this->yaw += yaw;
 
@@ -56,7 +52,7 @@ namespace gps {
         if (this->pitch < -89.0f) {
             this->pitch = -89.0f;
         }
-//        printf("%f %f\n", this->pitch, this->yaw);
+        printf("%f %f\n", this->pitch, this->yaw);
         cameraFrontDirection.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
         cameraFrontDirection.y = sin(glm::radians(this->pitch));
         cameraFrontDirection.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));

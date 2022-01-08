@@ -1,0 +1,26 @@
+To-do list
+- Window
+  - [x] Resize
+  - [x] Keep scale
+- Scene
+  - [x] Rotation
+  - [ ] Scaling
+  - [ ] Translation
+- Camera movement
+  - [x] Keyboard
+  - [ ] Mouse
+- Light
+  - [x] Directional
+  - [ ] Local
+- Objects
+  - [x] Solid
+  - [ ] Wireframe
+  - [ ] Polygonal
+  - [x] Smooth surface
+- Textures
+  - [x] texture quality and level of detail
+  - [x] texture mapping on objects
+- Shadows
+  - [ ] shadow computation
+- [ ] Animation
+- [ ] Documentation

@@ -49,6 +49,10 @@ GLfloat lastFrame = 0;
 GLfloat cameraSpeed = 10.0f;
 GLfloat cameraRotation = 100.0f;
 
+//mouse
+float prevX = WIDTH / 2.;
+float prevY = HEIGHT / 2.;
+
 GLboolean pressedKeys[1024];
 
 // models
@@ -100,12 +104,16 @@ GLenum glCheckError_(const char *file, int line) {
 void windowResizeCallback(GLFWwindow *window, int width, int height) {
     fprintf(stdout, "Window resized! New width: %d , and height: %d\n", width, height);
     myWindow.setWindowDimensions(WindowDimensions{width, height});
-
     myBasicShader.useShaderProgram();
-    projection=glm::perspective(glm::radians(45.0f),(float ) width/(float )height,0.1f,1000.0f);
-    glUniformMatrix4fv(glGetUniformLocation(myBasicShader.shaderProgram, "projection"), 1, GL_FALSE,glm::value_ptr(projection));
+
+    projection = glm::perspective(glm::radians(45.0f), (float) width / (float) height, 0.1f, 1000.0f);
+    glUniformMatrix4fv(glGetUniformLocation(myBasicShader.shaderProgram, "projection"), 1, GL_FALSE,
+                       glm::value_ptr(projection));
+
     skyBoxShader.useShaderProgram();
-    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "projection"), 1, GL_FALSE,glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "projection"), 1, GL_FALSE,
+                       glm::value_ptr(projection));
+
     glViewport(0, 0, width, height);
 }
 
@@ -123,8 +131,18 @@ void keyboardCallback(GLFWwindow *window, int key, int scancode, int action, int
     }
 }
 
+
 void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
-    //TODO
+    float deltaX = xpos - prevX;
+    float deltaY = prevY - ypos;
+    prevX = xpos;
+    prevY = ypos;
+
+    float sensitivity = 2.5f;
+    deltaX *= sensitivity;
+    deltaY *= sensitivity;
+
+    myCamera.rotate(glm::radians(deltaY), glm::radians(deltaX));
 }
 
 void processMovement() {
@@ -205,6 +223,7 @@ void initOpenGLState() {
     glEnable(GL_CULL_FACE); // cull face
     glCullFace(GL_BACK); // cull back face
     glFrontFace(GL_CCW); // GL_CCW for counter clock-wise
+    glfwSetInputMode(myWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void initSkyBox() {
@@ -269,7 +288,8 @@ void initUniforms() {
     skyBoxShader.useShaderProgram();
     view = myCamera.getViewMatrix();
     glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "projection"), 1, GL_FALSE,
+                       glm::value_ptr(projection));
 }
 
 void renderTeapot(gps::Shader shader) {
