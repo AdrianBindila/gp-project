@@ -159,6 +159,7 @@ void processMovement() {
      * mouse - look
      * arrows - look
      * Q,E - rotate teapot
+     * R - enable/disable wireframe
     */
     //camera movement
     float deltaSpeed = cameraSpeed * delta;
@@ -215,18 +216,25 @@ void processMovement() {
     //object movement
     if (pressedKeys[GLFW_KEY_Q]) {
         angle -= 1.0f;
-        // update model matrix for teapot
-        model = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0, 1, 0));
-        // update normal matrix for teapot
-        normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
     }
-
     if (pressedKeys[GLFW_KEY_E]) {
         angle += 1.0f;
-        // update model matrix for teapot
-        model = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0, 1, 0));
-        // update normal matrix for teapot
-        normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
+    }
+    // update model matrix for teapot
+    model = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0, 1, 0));
+    // update normal matrix for teapot
+    normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
+
+    //others
+    if (pressedKeys[GLFW_KEY_R]) {//reset
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glShadeModel(GL_SMOOTH);
+    }
+    if (pressedKeys[GLFW_KEY_T]) {//wireframe
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    if (pressedKeys[GLFW_KEY_Y]) {//polygonal
+        glShadeModel(GL_FLAT);
     }
 }
 

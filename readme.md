@@ -8,13 +8,13 @@ To-do list
   - [ ] Translation
 - Camera movement
   - [x] Keyboard
-  - [ ] Mouse
+  - [x] Mouse
 - Light
   - [x] Directional
   - [ ] Local
 - Objects
   - [x] Solid
-  - [ ] Wireframe
+  - [x] Wireframe
   - [ ] Polygonal
   - [x] Smooth surface
 - Textures
