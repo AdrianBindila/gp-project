@@ -16,6 +16,8 @@
 
 #include <iostream>
 
+#define WIDTH 1024
+#define HEIGHT 768
 // window
 gps::Window myWindow;
 
@@ -97,13 +99,14 @@ GLenum glCheckError_(const char *file, int line) {
 
 void windowResizeCallback(GLFWwindow *window, int width, int height) {
     fprintf(stdout, "Window resized! New width: %d , and height: %d\n", width, height);
-//    int bufWidth;
-//    int bufHeight;
-//    glfwGetFramebufferSize(window, &bufWidth, &bufHeight);
-//    glViewport(0, 0, bufWidth, bufHeight);
-//    myWindow.setWindowDimensions(WindowDimensions{width, height});
+    myWindow.setWindowDimensions(WindowDimensions{width, height});
 
-
+    myBasicShader.useShaderProgram();
+    projection=glm::perspective(glm::radians(45.0f),(float ) width/(float )height,0.1f,1000.0f);
+    glUniformMatrix4fv(glGetUniformLocation(myBasicShader.shaderProgram, "projection"), 1, GL_FALSE,glm::value_ptr(projection));
+    skyBoxShader.useShaderProgram();
+    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "projection"), 1, GL_FALSE,glm::value_ptr(projection));
+    glViewport(0, 0, width, height);
 }
 
 void keyboardCallback(GLFWwindow *window, int key, int scancode, int action, int mode) {
@@ -184,7 +187,7 @@ void processMovement() {
 }
 
 void initOpenGLWindow() {
-    myWindow.Create(1024, 768, "OpenGL Project Core");
+    myWindow.Create(WIDTH, HEIGHT, "OpenGL Project Core");
 }
 
 void setWindowCallbacks() {
@@ -206,18 +209,13 @@ void initOpenGLState() {
 
 void initSkyBox() {
     std::vector<const GLchar *> faces;
-
-    faces.push_back("../skybox/right.tga");
-    faces.push_back("../skybox/left.tga");
-    faces.push_back("../skybox/top.tga");
-    faces.push_back("../skybox/bottom.tga");
-    faces.push_back("../skybox/back.tga");
-    faces.push_back("../skybox/front.tga");
+    faces.push_back("../skybox/right.jpg");
+    faces.push_back("../skybox/left.jpg");
+    faces.push_back("../skybox/top.jpg");
+    faces.push_back("../skybox/bottom.jpg");
+    faces.push_back("../skybox/front.jpg");
+    faces.push_back("../skybox/back.jpg");
     skyBox.Load(faces);
-
-    skyBoxShader.loadShader("../shaders/skyboxShader.vert", "../shaders/skyboxShader.frag");
-
-
 }
 
 void initModels() {
@@ -225,9 +223,8 @@ void initModels() {
 }
 
 void initShaders() {
-    myBasicShader.loadShader(
-            "../shaders/basic.vert",
-            "../shaders/basic.frag");
+    myBasicShader.loadShader("../shaders/basic.vert", "../shaders/basic.frag");
+    skyBoxShader.loadShader("../shaders/skyboxShader.vert", "../shaders/skyboxShader.frag");
 }
 
 void initUniforms() {
@@ -236,11 +233,6 @@ void initUniforms() {
     // create model matrix for teapot
     model = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
     modelLoc = glGetUniformLocation(myBasicShader.shaderProgram, "model");
-
-    //skybox-view
-    view = myCamera.getViewMatrix();
-    viewLoc = glGetUniformLocation(skyBoxShader.shaderProgram, "view");
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
     // get view matrix for current camera
     view = myCamera.getViewMatrix();
@@ -251,16 +243,15 @@ void initUniforms() {
     normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
     normalMatrixLoc = glGetUniformLocation(myBasicShader.shaderProgram, "normalMatrix");
 
-    //skybox-projection
-    //    projection = glm::perspective(glm::radians(45.0f), (float) retina_width / (float) retina_height, 0.1f, 1000.0f);
-    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
     // create projection matrix
     projection = glm::perspective(glm::radians(45.0f),
                                   (float) myWindow.getWindowDimensions().width /
                                   (float) myWindow.getWindowDimensions().height,
-                                  0.1f, 40.0f);
+                                  0.1f, 1000.0f);
     // send projection matrix to shader
-    glUniformMatrix4fv(glGetUniformLocation(myBasicShader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(myBasicShader.shaderProgram, "projection"), 1, GL_FALSE,
+                       glm::value_ptr(projection));
 
     //set the light direction (direction towards the light)
     lightDir = glm::vec3(0.0f, 1.0f, 1.0f);
@@ -273,6 +264,12 @@ void initUniforms() {
     lightColorLoc = glGetUniformLocation(myBasicShader.shaderProgram, "lightColor");
     // send light color to shader
     glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
+
+    //skybox
+    skyBoxShader.useShaderProgram();
+    view = myCamera.getViewMatrix();
+    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(skyBoxShader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 }
 
 void renderTeapot(gps::Shader shader) {
