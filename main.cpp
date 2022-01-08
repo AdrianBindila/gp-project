@@ -97,11 +97,11 @@ GLenum glCheckError_(const char *file, int line) {
 
 void windowResizeCallback(GLFWwindow *window, int width, int height) {
     fprintf(stdout, "Window resized! New width: %d , and height: %d\n", width, height);
-    int bufWidth;
-    int bufHeight;
-    glfwGetFramebufferSize(window, &bufWidth, &bufHeight);
-    glViewport(0, 0, bufWidth, bufHeight);
-    myWindow.setWindowDimensions(WindowDimensions{width, height});
+//    int bufWidth;
+//    int bufHeight;
+//    glfwGetFramebufferSize(window, &bufWidth, &bufHeight);
+//    glViewport(0, 0, bufWidth, bufHeight);
+//    myWindow.setWindowDimensions(WindowDimensions{width, height});
 
 
 }

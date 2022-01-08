@@ -1,4 +1,4 @@
-# Install script for directory: /home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core
+# Install script for directory: /home/adrian/Dev/Graphics processing/gp-project
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/adrian/Dev/Graphics processing/gp-project/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
