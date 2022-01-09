@@ -160,6 +160,9 @@ void processMovement() {
      * arrows - look
      * Q,E - rotate teapot
      * R - enable/disable wireframe
+     * T - Wireframe
+     * Y - Polygonal shading
+     * U - Unlock mouse
     */
     //camera movement
     float deltaSpeed = cameraSpeed * delta;
@@ -229,12 +232,16 @@ void processMovement() {
     if (pressedKeys[GLFW_KEY_R]) {//reset
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glShadeModel(GL_SMOOTH);
+        glfwSetInputMode(myWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     if (pressedKeys[GLFW_KEY_T]) {//wireframe
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
     if (pressedKeys[GLFW_KEY_Y]) {//polygonal
         glShadeModel(GL_FLAT);
+    }
+    if(pressedKeys[GLFW_KEY_U]){//unlock mouse
+        glfwSetInputMode(myWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 }
 
