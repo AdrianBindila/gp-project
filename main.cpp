@@ -58,7 +58,8 @@ GLboolean pressedKeys[1024];
 
 // models
 gps::Model3D teapot;
-GLfloat angle;
+GLfloat anglePitch;
+GLfloat angleYaw;
 
 // shaders
 gps::Shader myBasicShader;
@@ -218,13 +219,20 @@ void processMovement() {
 
     //object movement
     if (pressedKeys[GLFW_KEY_Q]) {
-        angle -= 1.0f;
+        angleYaw -= 1.0f;
     }
     if (pressedKeys[GLFW_KEY_E]) {
-        angle += 1.0f;
+        angleYaw += 1.0f;
+    }
+    if(pressedKeys[GLFW_KEY_Z]){
+        anglePitch-=1.0f;
+    }
+    if(pressedKeys[GLFW_KEY_C]){
+        anglePitch+=1.0f;
     }
     // update model matrix for teapot
-    model = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0, 1, 0));
+    model = glm::rotate(glm::mat4(1.0f), glm::radians(angleYaw), glm::vec3(0, 1, 0));
+    model = glm::rotate(model, glm::radians(anglePitch), glm::vec3(0, 0, 1));
     // update normal matrix for teapot
     normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
 
@@ -240,7 +248,7 @@ void processMovement() {
     if (pressedKeys[GLFW_KEY_Y]) {//polygonal
         glShadeModel(GL_FLAT);
     }
-    if(pressedKeys[GLFW_KEY_U]){//unlock mouse
+    if (pressedKeys[GLFW_KEY_U]) {//unlock mouse
         glfwSetInputMode(myWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 }
@@ -291,7 +299,8 @@ void initUniforms() {
     myBasicShader.useShaderProgram();
 
     // create model matrix for teapot
-    model = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(glm::mat4(1.0f), glm::radians(anglePitch), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(glm::mat4(1.0f), glm::radians(angleYaw), glm::vec3(0.0f, 0.0f, 1.0f));
     modelLoc = glGetUniformLocation(myBasicShader.shaderProgram, "model");
 
     // get view matrix for current camera
