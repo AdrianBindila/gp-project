@@ -288,7 +288,7 @@ void initSkyBox() {
 }
 
 void initModels() {
-    teapot.LoadModel("../models/library/library.obj");
+    teapot.LoadModel("../models/others/Map_v1.obj");
 }
 
 void initShaders() {

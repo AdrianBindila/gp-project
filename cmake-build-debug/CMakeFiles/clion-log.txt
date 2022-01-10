@@ -1,4 +1,4 @@
-/home/adrian/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.5744.254/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/adrian/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.5744.254/bin/ninja/linux/ninja -G Ninja "/home/adrian/Dev/Graphics processing/gp-project"
+/home/adrian/programs/CLion-2021.1/clion-2021.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/adrian/programs/CLion-2021.1/clion-2021.1/bin/ninja/linux/ninja -G Ninja /home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core
 -- The C compiler identification is GNU 9.3.0
 -- The CXX compiler identification is GNU 9.3.0
 -- Detecting C compiler ABI info
@@ -13,4 +13,4 @@
 -- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/adrian/Dev/Graphics processing/gp-project/cmake-build-debug
+-- Build files have been written to: /home/adrian/Documents/faculta/graphics-processing/GP_Project/OpenGL_Project_Core/cmake-build-debug
