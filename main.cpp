@@ -218,6 +218,7 @@ void processMovement() {
     normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
 
     //object movement
+    //teapot - rotate
     if (pressedKeys[GLFW_KEY_Q]) {
         angleYaw -= 1.0f;
     }
@@ -287,7 +288,7 @@ void initSkyBox() {
 }
 
 void initModels() {
-    teapot.LoadModel("../models/teapot/teapot20segUT.obj");
+    teapot.LoadModel("../models/library/library.obj");
 }
 
 void initShaders() {
