@@ -1,4 +1,5 @@
 #include <GL/glew.h>
+#include <iostream>
 #include "Camera.hpp"
 
 namespace gps {
@@ -44,6 +45,7 @@ namespace gps {
                 cameraPosition -= speed * cameraUp;
                 break;
         }
+//        std::cout<<cameraPosition.x<<" "<<cameraPosition.y<<" "<<cameraPosition.z<<"\n";
     }
 
     //update the camera internal parameters following a camera rotate event

@@ -10,15 +10,12 @@ out vec4 fColor;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat3 normalMatrix;
-
 //lighting
 uniform vec3 lightDir;
 uniform vec3 lightColor;
-
 // textures
 uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
-uniform float fogDensity;
 
 //components
 vec3 ambient;
@@ -32,12 +29,12 @@ vec4 fPosEye;
 
 float computeFog()
 {
- float fragmentDistance = length(fPosEye);
- float fogFactor = exp(-pow(fragmentDistance * fogDensity, 2));
+    float fogDensity=0.02f;
+    float fragmentDistance = length(fPosEye);
+    float fogFactor = exp(-pow(fragmentDistance * fogDensity, 2));
 
- return clamp(fogFactor, 0.0f, 1.0f);
+    return clamp(fogFactor, 0.0f, 1.0f);
 }
-
 void computeDirLight()
 {
     //compute eye space coordinates
@@ -62,7 +59,7 @@ void computeDirLight()
     specular = specularStrength * specCoeff * lightColor;
 }
 
-void main() 
+void main()
 {
     computeDirLight();
 

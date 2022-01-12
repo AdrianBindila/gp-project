@@ -16,8 +16,8 @@
 
 #include <iostream>
 
-#define WIDTH 1024
-#define HEIGHT 768
+#define WIDTH 1920
+#define HEIGHT 1080
 // window
 gps::Window myWindow;
 
@@ -30,7 +30,8 @@ glm::mat3 normalMatrix;
 // light parameters
 glm::vec3 lightDir;
 glm::vec3 lightColor;
-
+//fog
+float fogDensity = 0.02f;
 // shader uniform locations
 GLint modelLoc;
 GLint viewLoc;
@@ -38,6 +39,7 @@ GLint projectionLoc;
 GLint normalMatrixLoc;
 GLint lightDirLoc;
 GLint lightColorLoc;
+GLint fogDensityLoc;
 
 // camera
 gps::Camera myCamera(
@@ -57,10 +59,14 @@ bool firstMouse = true;
 GLboolean pressedKeys[1024];
 
 // models
+gps::Model3D map;
+gps::Shader mapShader;
+
 gps::Model3D teapot;
 GLfloat anglePitch;
 GLfloat angleYaw;
-
+glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+glm::vec3 movement = glm::vec3(.0f, .0f, .0f);
 // shaders
 gps::Shader myBasicShader;
 
@@ -159,7 +165,7 @@ void processMovement() {
      * LShift - turbo
      * mouse - look
      * arrows - look
-     * Q,E - rotate teapot
+     * Q,E,Z,C - rotate teapot
      * R - enable/disable wireframe
      * T - Wireframe
      * Y - Polygonal shading
@@ -225,15 +231,30 @@ void processMovement() {
     if (pressedKeys[GLFW_KEY_E]) {
         angleYaw += 1.0f;
     }
-    if(pressedKeys[GLFW_KEY_Z]){
-        anglePitch-=1.0f;
+    if (pressedKeys[GLFW_KEY_Z]) {
+        anglePitch -= 1.0f;
     }
-    if(pressedKeys[GLFW_KEY_C]){
-        anglePitch+=1.0f;
+    if (pressedKeys[GLFW_KEY_C]) {
+        anglePitch += 1.0f;
+    }
+    if (pressedKeys[GLFW_KEY_EQUAL]) {//teapot size up
+        scale += glm::vec3(.1f, .1f, .1f);
+    }
+    if (pressedKeys[GLFW_KEY_MINUS]) {
+        if (scale.x > 0)//do not reverse scale
+            scale -= glm::vec3(.1f, .1f, .1f);
+    }
+    if (pressedKeys[GLFW_KEY_LEFT_BRACKET]) {
+        movement += glm::vec3(.1f, .0f, .0f);
+    }
+    if (pressedKeys[GLFW_KEY_RIGHT_BRACKET]) {
+        movement -= glm::vec3(.1f, .0f, .0f);
     }
     // update model matrix for teapot
     model = glm::rotate(glm::mat4(1.0f), glm::radians(angleYaw), glm::vec3(0, 1, 0));
     model = glm::rotate(model, glm::radians(anglePitch), glm::vec3(0, 0, 1));
+    model = glm::scale(model, scale);
+    model = glm::translate(model, movement);
     // update normal matrix for teapot
     normalMatrix = glm::mat3(glm::inverseTranspose(view * model));
 
@@ -246,11 +267,23 @@ void processMovement() {
     if (pressedKeys[GLFW_KEY_T]) {//wireframe
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
-    if (pressedKeys[GLFW_KEY_Y]) {//polygonal
-        glShadeModel(GL_FLAT);
+    if (pressedKeys[GLFW_KEY_Y]) {//point
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
     }
     if (pressedKeys[GLFW_KEY_U]) {//unlock mouse
         glfwSetInputMode(myWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+    if (pressedKeys[GLFW_KEY_F]) {//fog off
+        fogDensity = 0.0f;
+        myBasicShader.useShaderProgram();
+        fogDensityLoc = glGetUniformLocation(myBasicShader.shaderProgram, "fogDensity");
+        glUniform1fv(fogDensityLoc, 1, &fogDensity);
+    }
+    if (pressedKeys[GLFW_KEY_G]) {//fog on
+        fogDensity = 0.02f;
+        myBasicShader.useShaderProgram();
+        fogDensityLoc = glGetUniformLocation(myBasicShader.shaderProgram, "fogDensity");
+        glUniform1fv(fogDensityLoc, 1, &fogDensity);
     }
 }
 
@@ -274,6 +307,7 @@ void initOpenGLState() {
     glCullFace(GL_BACK); // cull back face
     glFrontFace(GL_CCW); // GL_CCW for counter clock-wise
     glfwSetInputMode(myWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 }
 
 void initSkyBox() {
@@ -288,8 +322,10 @@ void initSkyBox() {
 }
 
 void initModels() {
-    teapot.LoadModel("../models/others/Map_v1.obj");
+    map.LoadModel("../models/others/Map_v1.obj");
+    teapot.LoadModel("../models/teapot/teapot20segUT.obj");
 }
+
 
 void initShaders() {
     myBasicShader.loadShader("../shaders/basic.vert", "../shaders/basic.frag");
@@ -300,9 +336,9 @@ void initUniforms() {
     myBasicShader.useShaderProgram();
 
     // create model matrix for teapot
-    model = glm::rotate(glm::mat4(1.0f), glm::radians(anglePitch), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(glm::mat4(1.0f), glm::radians(angleYaw), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::mat4(1.0f);
     modelLoc = glGetUniformLocation(myBasicShader.shaderProgram, "model");
+
 
     // get view matrix for current camera
     view = myCamera.getViewMatrix();
@@ -320,7 +356,8 @@ void initUniforms() {
                                   (float) myWindow.getWindowDimensions().height,
                                   0.1f, 1000.0f);
     // send projection matrix to shader
-    glUniformMatrix4fv(glGetUniformLocation(myBasicShader.shaderProgram, "projection"), 1, GL_FALSE,
+    projectionLoc = glGetUniformLocation(myBasicShader.shaderProgram, "projection");
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE,
                        glm::value_ptr(projection));
 
     //set the light direction (direction towards the light)
@@ -335,6 +372,10 @@ void initUniforms() {
     // send light color to shader
     glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
 
+    //fog
+    fogDensityLoc = glGetUniformLocation(myBasicShader.shaderProgram, "fogDensity");
+    glUniform1fv(fogDensityLoc, 1, &fogDensity);
+
     //skybox
     skyBoxShader.useShaderProgram();
     view = myCamera.getViewMatrix();
@@ -345,8 +386,8 @@ void initUniforms() {
 
 void renderTeapot(gps::Shader shader) {
     // select active shader program
+//    shader.useShaderProgram();
     shader.useShaderProgram();
-
     //send teapot model matrix data to shader
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -359,9 +400,13 @@ void renderTeapot(gps::Shader shader) {
 
 void renderScene() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     //render the scene
+    glm::mat4 mapModel = glm::translate(glm::mat4(1.0f),glm::vec3(-15.0f,-1.0f,8.0f));
+    myBasicShader.useShaderProgram();
+    GLint mapModelLoc = glGetUniformLocation(myBasicShader.shaderProgram, "model");
+    glUniformMatrix4fv(mapModelLoc, 1, GL_FALSE, glm::value_ptr(mapModel));
 
+    map.Draw(myBasicShader);
     // render the teapot
     renderTeapot(myBasicShader);
     skyBox.Draw(skyBoxShader, view, projection);

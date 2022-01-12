@@ -4,8 +4,8 @@ To-do list
   - [x] Keep scale
 - Scene
   - [x] Rotation
-  - [ ] Scaling
-  - [ ] Translation
+  - [x] Scaling
+  - [x] Translation
 - Camera movement
   - [x] Keyboard
   - [x] Mouse
@@ -23,4 +23,5 @@ To-do list
 - Shadows
   - [ ] shadow computation
 - [ ] Animation
+- [x] Fog
 - [ ] Documentation
